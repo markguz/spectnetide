@@ -1,0 +1,36 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash",
+      "mcp__serena__initial_instructions"
+    ],
+    "deny": [],
+    "ask": []
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "python3 .claude/scripts/context-monitor.py"
+  },
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cat /home/markguz/projects/spectnetide/docs/STRICTRULES.MD"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cat /home/markguz/projects/spectnetide/docs/STRICTRULES.MD"
+          }
+        ]
+      }
+    ]
+  }
+}
