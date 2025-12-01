@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>Spect.Net.SpectrumEmu</RootNamespace>
+    <AssemblyName>Spect.Net.SpectrumEmu</AssemblyName>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Assembler\Spect.Net.Assembler\Spect.Net.Assembler.Core.csproj" />
+    <ProjectReference Include="..\..\Assembler\Spect.Net.EvalParser\Spect.Net.EvalParser.Core.csproj" />
+    <ProjectReference Include="..\Spect.Net.RomResources\Spect.Net.RomResources.Core.csproj" />
+  </ItemGroup>
+
+</Project>
