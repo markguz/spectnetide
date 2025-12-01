@@ -7,6 +7,7 @@ using OmniSharp.Extensions.LanguageServer.Protocol.Server;
 using OmniSharp.Extensions.LanguageServer.Protocol.Server.Capabilities;
 using Microsoft.Extensions.Logging;
 using Spect.Net.Assembler.Assembler;
+using Spect.Net.LanguageServer.Services;
 
 namespace Spect.Net.LanguageServer.Handlers;
 
@@ -14,11 +15,13 @@ public class TextDocumentHandler : ITextDocumentSyncHandler
 {
     private readonly ILogger<TextDocumentHandler> _logger;
     private readonly ILanguageServerFacade _languageServer;
+    private readonly Z80CompilationCache _compilationCache;
 
-    public TextDocumentHandler(ILogger<TextDocumentHandler> logger, ILanguageServerFacade languageServer)
+    public TextDocumentHandler(ILogger<TextDocumentHandler> logger, ILanguageServerFacade languageServer, Z80CompilationCache compilationCache)
     {
         _logger = logger;
         _languageServer = languageServer;
+        _compilationCache = compilationCache;
     }
 
     public TextDocumentSyncKind Change { get; } = TextDocumentSyncKind.Full;
@@ -63,6 +66,8 @@ public class TextDocumentHandler : ITextDocumentSyncHandler
         var assembler = new Z80Assembler();
         var output = assembler.Compile(text);
         
+        _compilationCache.Update(uri, assembler, output);
+
         var diagnostics = new List<Diagnostic>();
 
         foreach (var error in output.Errors)
