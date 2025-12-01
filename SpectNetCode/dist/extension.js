@@ -6682,8 +6682,8 @@ var require_protocolCodeAction = __commonJS({
   "node_modules/vscode-languageclient/lib/common/protocolCodeAction.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-    var vscode2 = require("vscode");
-    var ProtocolCodeAction = class extends vscode2.CodeAction {
+    var vscode3 = require("vscode");
+    var ProtocolCodeAction = class extends vscode3.CodeAction {
       constructor(title, data) {
         super(title);
         this.data = data;
@@ -6699,7 +6699,7 @@ var require_protocolDiagnostic = __commonJS({
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.ProtocolDiagnostic = exports2.DiagnosticCode = void 0;
-    var vscode2 = require("vscode");
+    var vscode3 = require("vscode");
     var Is = require_is();
     var DiagnosticCode;
     (function(DiagnosticCode2) {
@@ -6709,7 +6709,7 @@ var require_protocolDiagnostic = __commonJS({
       }
       DiagnosticCode2.is = is;
     })(DiagnosticCode || (exports2.DiagnosticCode = DiagnosticCode = {}));
-    var ProtocolDiagnostic = class extends vscode2.Diagnostic {
+    var ProtocolDiagnostic = class extends vscode3.Diagnostic {
       constructor(range, message, severity, data) {
         super(range, message, severity);
         this.data = data;
@@ -10713,7 +10713,7 @@ var require_notebook = __commonJS({
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.NotebookDocumentSyncFeature = void 0;
-    var vscode2 = require("vscode");
+    var vscode3 = require("vscode");
     var minimatch = require_minimatch();
     var proto = require_main3();
     var UUID = require_uuid();
@@ -10768,9 +10768,9 @@ var require_notebook = __commonJS({
         c2p2.asNotebookCell = asNotebookCell;
         function asNotebookCellKind(kind) {
           switch (kind) {
-            case vscode2.NotebookCellKind.Markup:
+            case vscode3.NotebookCellKind.Markup:
               return proto.NotebookCellKind.Markup;
-            case vscode2.NotebookCellKind.Code:
+            case vscode3.NotebookCellKind.Code:
               return proto.NotebookCellKind.Code;
           }
         }
@@ -11021,25 +11021,25 @@ var require_notebook = __commonJS({
         this.notebookDidOpen = /* @__PURE__ */ new Set();
         this.disposables = [];
         this.selector = client2.protocol2CodeConverter.asDocumentSelector($NotebookDocumentSyncOptions.asDocumentSelector(options));
-        vscode2.workspace.onDidOpenNotebookDocument((notebookDocument) => {
+        vscode3.workspace.onDidOpenNotebookDocument((notebookDocument) => {
           this.notebookDidOpen.add(notebookDocument.uri.toString());
           this.didOpen(notebookDocument);
         }, void 0, this.disposables);
-        for (const notebookDocument of vscode2.workspace.notebookDocuments) {
+        for (const notebookDocument of vscode3.workspace.notebookDocuments) {
           this.notebookDidOpen.add(notebookDocument.uri.toString());
           this.didOpen(notebookDocument);
         }
-        vscode2.workspace.onDidChangeNotebookDocument((event) => this.didChangeNotebookDocument(event), void 0, this.disposables);
+        vscode3.workspace.onDidChangeNotebookDocument((event) => this.didChangeNotebookDocument(event), void 0, this.disposables);
         if (this.options.save === true) {
-          vscode2.workspace.onDidSaveNotebookDocument((notebookDocument) => this.didSave(notebookDocument), void 0, this.disposables);
+          vscode3.workspace.onDidSaveNotebookDocument((notebookDocument) => this.didSave(notebookDocument), void 0, this.disposables);
         }
-        vscode2.workspace.onDidCloseNotebookDocument((notebookDocument) => {
+        vscode3.workspace.onDidCloseNotebookDocument((notebookDocument) => {
           this.didClose(notebookDocument);
           this.notebookDidOpen.delete(notebookDocument.uri.toString());
         }, void 0, this.disposables);
       }
       getState() {
-        for (const notebook of vscode2.workspace.notebookDocuments) {
+        for (const notebook of vscode3.workspace.notebookDocuments) {
           const matchingCells = this.getMatchingCells(notebook);
           if (matchingCells !== void 0) {
             return { kind: "document", id: "$internal", registrations: true, matches: true };
@@ -11051,10 +11051,10 @@ var require_notebook = __commonJS({
         return "notebook";
       }
       handles(textDocument) {
-        return vscode2.languages.match(this.selector, textDocument) > 0;
+        return vscode3.languages.match(this.selector, textDocument) > 0;
       }
       didOpenNotebookCellTextDocument(notebookDocument, cell) {
-        if (vscode2.languages.match(this.selector, cell.document) === 0) {
+        if (vscode3.languages.match(this.selector, cell.document) === 0) {
           return;
         }
         if (!this.notebookDidOpen.has(notebookDocument.uri.toString())) {
@@ -11085,7 +11085,7 @@ var require_notebook = __commonJS({
         }
       }
       didChangeNotebookCellTextDocument(notebookDocument, event) {
-        if (vscode2.languages.match(this.selector, event.document) === 0) {
+        if (vscode3.languages.match(this.selector, event.document) === 0) {
           return;
         }
         this.doSendChange({
@@ -11358,7 +11358,7 @@ var require_notebook = __commonJS({
         this.client = client2;
         this.registrations = /* @__PURE__ */ new Map();
         this.registrationType = proto.NotebookDocumentSyncRegistrationType.type;
-        vscode2.workspace.onDidOpenTextDocument((textDocument) => {
+        vscode3.workspace.onDidOpenTextDocument((textDocument) => {
           if (textDocument.uri.scheme !== _NotebookDocumentSyncFeature.CellScheme) {
             return;
           }
@@ -11372,7 +11372,7 @@ var require_notebook = __commonJS({
             }
           }
         });
-        vscode2.workspace.onDidChangeTextDocument((event) => {
+        vscode3.workspace.onDidChangeTextDocument((event) => {
           if (event.contentChanges.length === 0) {
             return;
           }
@@ -11390,7 +11390,7 @@ var require_notebook = __commonJS({
             }
           }
         });
-        vscode2.workspace.onDidCloseTextDocument((textDocument) => {
+        vscode3.workspace.onDidCloseTextDocument((textDocument) => {
           if (textDocument.uri.scheme !== _NotebookDocumentSyncFeature.CellScheme) {
             return;
           }
@@ -11455,7 +11455,7 @@ var require_notebook = __commonJS({
         if (textDocument.uri.scheme !== _NotebookDocumentSyncFeature.CellScheme) {
           return false;
         }
-        if (this.dedicatedChannel !== void 0 && vscode2.languages.match(this.dedicatedChannel, textDocument) > 0) {
+        if (this.dedicatedChannel !== void 0 && vscode3.languages.match(this.dedicatedChannel, textDocument) > 0) {
           return true;
         }
         for (const provider of this.registrations.values()) {
@@ -11475,7 +11475,7 @@ var require_notebook = __commonJS({
       }
       findNotebookDocumentAndCell(textDocument) {
         const uri = textDocument.uri.toString();
-        for (const notebookDocument of vscode2.workspace.notebookDocuments) {
+        for (const notebookDocument of vscode3.workspace.notebookDocuments) {
           for (const cell of notebookDocument.getCells()) {
             if (cell.document.uri.toString() === uri) {
               return [notebookDocument, cell];
@@ -13991,7 +13991,7 @@ var require_semanticTokens = __commonJS({
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.SemanticTokensFeature = void 0;
-    var vscode2 = require("vscode");
+    var vscode3 = require("vscode");
     var vscode_languageserver_protocol_1 = require_main3();
     var features_1 = require_features();
     var Is = require_is();
@@ -14069,7 +14069,7 @@ var require_semanticTokens = __commonJS({
         const selector = options.documentSelector;
         const fullProvider = Is.boolean(options.full) ? options.full : options.full !== void 0;
         const hasEditProvider = options.full !== void 0 && typeof options.full !== "boolean" && options.full.delta === true;
-        const eventEmitter = new vscode2.EventEmitter();
+        const eventEmitter = new vscode3.EventEmitter();
         const documentProvider = fullProvider ? {
           onDidChangeSemanticTokens: eventEmitter.event,
           provideDocumentSemanticTokens: (document, token) => {
@@ -14141,12 +14141,12 @@ var require_semanticTokens = __commonJS({
         const legend = client2.protocol2CodeConverter.asSemanticTokensLegend(options.legend);
         const documentSelector = client2.protocol2CodeConverter.asDocumentSelector(selector);
         if (documentProvider !== void 0) {
-          disposables.push(vscode2.languages.registerDocumentSemanticTokensProvider(documentSelector, documentProvider, legend));
+          disposables.push(vscode3.languages.registerDocumentSemanticTokensProvider(documentSelector, documentProvider, legend));
         }
         if (rangeProvider !== void 0) {
-          disposables.push(vscode2.languages.registerDocumentRangeSemanticTokensProvider(documentSelector, rangeProvider, legend));
+          disposables.push(vscode3.languages.registerDocumentRangeSemanticTokensProvider(documentSelector, rangeProvider, legend));
         }
-        return [new vscode2.Disposable(() => disposables.forEach((item) => item.dispose())), { range: rangeProvider, full: documentProvider, onDidChangeSemanticTokensEmitter: eventEmitter }];
+        return [new vscode3.Disposable(() => disposables.forEach((item) => item.dispose())), { range: rangeProvider, full: documentProvider, onDidChangeSemanticTokensEmitter: eventEmitter }];
       }
     };
     exports2.SemanticTokensFeature = SemanticTokensFeature;
@@ -18012,9 +18012,163 @@ __export(extension_exports, {
   deactivate: () => deactivate
 });
 module.exports = __toCommonJS(extension_exports);
-var vscode = __toESM(require("vscode"));
+var vscode2 = __toESM(require("vscode"));
 var path = __toESM(require("path"));
 var import_node = __toESM(require_node3());
+
+// src/KeyboardPanel.ts
+var vscode = __toESM(require("vscode"));
+var KeyboardPanel = class _KeyboardPanel {
+  constructor(panel, extensionUri) {
+    this._disposables = [];
+    this._panel = panel;
+    this._extensionUri = extensionUri;
+    this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
+    this._panel.webview.html = this._getHtmlForWebview(this._panel.webview);
+    this._panel.webview.onDidReceiveMessage(
+      (message) => {
+        switch (message.command) {
+          case "keyClicked":
+            this._handleKeyClick(message);
+            return;
+        }
+      },
+      null,
+      this._disposables
+    );
+  }
+  static createOrShow(extensionUri) {
+    const column = vscode.window.activeTextEditor ? vscode.window.activeTextEditor.viewColumn : void 0;
+    if (_KeyboardPanel.currentPanel) {
+      _KeyboardPanel.currentPanel._panel.reveal(column);
+      return;
+    }
+    const panel = vscode.window.createWebviewPanel(
+      "spectNetKeyboard",
+      "ZX Spectrum Keyboard",
+      column || vscode.ViewColumn.One,
+      {
+        enableScripts: true,
+        localResourceRoots: [vscode.Uri.joinPath(extensionUri, "src", "webview")]
+      }
+    );
+    _KeyboardPanel.currentPanel = new _KeyboardPanel(panel, extensionUri);
+  }
+  _handleKeyClick(message) {
+    const editor = vscode.window.activeTextEditor;
+    if (!editor) {
+      return;
+    }
+    let textToInsert = "";
+    if (message.keyword) {
+      textToInsert = message.keyword;
+    } else if (message.main) {
+      textToInsert = message.main;
+    }
+    if (textToInsert) {
+      editor.edit((editBuilder) => {
+        editBuilder.insert(editor.selection.active, textToInsert);
+      });
+    }
+  }
+  dispose() {
+    _KeyboardPanel.currentPanel = void 0;
+    this._panel.dispose();
+    while (this._disposables.length) {
+      const x = this._disposables.pop();
+      if (x) {
+        x.dispose();
+      }
+    }
+  }
+  _getHtmlForWebview(webview) {
+    const scriptPathOnDisk = vscode.Uri.joinPath(this._extensionUri, "src", "webview", "keyboard.js");
+    const scriptUri = webview.asWebviewUri(scriptPathOnDisk);
+    const stylePathOnDisk = vscode.Uri.joinPath(this._extensionUri, "src", "webview", "keyboard.css");
+    const styleUri = webview.asWebviewUri(stylePathOnDisk);
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="${styleUri}" rel="stylesheet">
+    <title>ZX Spectrum Keyboard</title>
+</head>
+<body>
+    <div class="keyboard-row">
+        ${this._createKey("1", "1", "!", "EDIT", "DEF FN", "blue")}
+        ${this._createKey("2", "2", "@", "CAPS LOCK", "FN", "red")}
+        ${this._createKey("3", "3", "#", "TRUE VIDEO", "LINE", "magenta")}
+        ${this._createKey("4", "4", "$", "INV VIDEO", "OPEN #", "green")}
+        ${this._createKey("5", "5", "%", "\u25C4", "CLOSE #", "cyan")}
+        ${this._createKey("6", "6", "&", "\u25BC", "MOVE", "yellow")}
+        ${this._createKey("7", "7", "'", "\u25B2", "ERASE", "white")}
+        ${this._createKey("8", "8", "(", "\u25BA", "POINT", "white")}
+        ${this._createKey("9", "9", ")", "GRAPHICS", "CAT", "white")}
+        ${this._createKey("0", "0", "_", "DELETE", "FORMAT", "black")}
+    </div>
+    <div class="keyboard-row">
+        ${this._createKey("Q", "Q", "<=", "SIN", "ASN", "", "PLOT")}
+        ${this._createKey("W", "W", "<>", "COS", "ACS", "", "DRAW")}
+        ${this._createKey("E", "E", ">=", "TAN", "ATN", "", "REM")}
+        ${this._createKey("R", "R", "<", "INT", "VERIFY", "", "RUN")}
+        ${this._createKey("T", "T", ">", "RND", "MERGE", "", "RAND")}
+        ${this._createKey("Y", "Y", "AND", "STR$", "[", "", "RETURN")}
+        ${this._createKey("U", "U", "OR", "CHR$", "]", "", "IF")}
+        ${this._createKey("I", "I", "AT", "CODE", "IN", "", "INPUT")}
+        ${this._createKey("O", "O", ";", "PEEK", "OUT", "", "POKE")}
+        ${this._createKey("P", "P", '"', "TAB", "(C)", "", "PRINT")}
+    </div>
+    <div class="keyboard-row">
+        ${this._createKey("A", "A", "STOP", "READ", "~", "", "NEW")}
+        ${this._createKey("S", "S", "NOT", "RESTORE", "|", "", "SAVE")}
+        ${this._createKey("D", "D", "STEP", "DATA", "\\", "", "DIM")}
+        ${this._createKey("F", "F", "TO", "SGN", "{", "", "FOR")}
+        ${this._createKey("G", "G", "THEN", "ABS", "}", "", "GOTO")}
+        ${this._createKey("H", "H", "\u2191", "SQR", "CIRCLE", "", "GOSUB")}
+        ${this._createKey("J", "J", "-", "VAL", "VAL$", "", "LOAD")}
+        ${this._createKey("K", "K", "+", "LEN", "SCREEN$", "", "LIST")}
+        ${this._createKey("L", "L", "=", "USR", "ATTR", "", "LET")}
+        <div class="key key-enter" data-code="Enter" data-keyword="ENTER">
+            <span class="key-main">ENTER</span>
+        </div>
+    </div>
+    <div class="keyboard-row">
+        <div class="key key-caps" data-code="CShift">
+            <span class="key-main">CAPS SHIFT</span>
+        </div>
+        ${this._createKey("Z", "Z", ":", "LN", "BEEP", "", "COPY")}
+        ${this._createKey("X", "X", "\xA3", "EXP", "INK", "", "CLEAR")}
+        ${this._createKey("C", "C", "?", "LPRINT", "PAPER", "", "CONT")}
+        ${this._createKey("V", "V", "/", "LLIST", "FLASH", "", "CLS")}
+        ${this._createKey("B", "B", "*", "BIN", "BRIGHT", "", "BORDER")}
+        ${this._createKey("N", "N", ",", "INKEY$", "OVER", "", "NEXT")}
+        ${this._createKey("M", "M", ".", "PI", "INVERSE", "", "PAUSE")}
+        <div class="key key-sym" data-code="SShift">
+            <span class="key-main">SYMBOL SHIFT</span>
+        </div>
+        <div class="key key-space" data-code="Space" data-main=" ">
+            <span class="key-main">SPACE</span>
+        </div>
+    </div>
+    <script src="${scriptUri}"></script>
+</body>
+</html>`;
+  }
+  _createKey(code, main, sshift, ext, extshift, color = "", keyword = "") {
+    const colorClass = color ? `color-${color}` : "";
+    const keywordAttr = keyword ? `data-keyword="${keyword}"` : "";
+    return `
+        <div class="key ${colorClass}" data-code="${code}" data-main="${main}" ${keywordAttr}>
+            <span class="key-sshift">${sshift}</span>
+            <span class="key-ext">${ext}</span>
+            <span class="key-main">${main}</span>
+            <span class="key-keyword">${keyword}</span>
+        </div>`;
+  }
+};
+
+// src/extension.ts
 var client;
 function activate(context) {
   console.log('Congratulations, your extension "spectnetcode" is now active!');
@@ -18027,7 +18181,7 @@ function activate(context) {
   let clientOptions = {
     documentSelector: [{ scheme: "file", language: "z80asm" }],
     synchronize: {
-      fileEvents: vscode.workspace.createFileSystemWatcher("**/*.z80asm")
+      fileEvents: vscode2.workspace.createFileSystemWatcher("**/*.z80asm")
     }
   };
   client = new import_node.LanguageClient(
@@ -18037,10 +18191,15 @@ function activate(context) {
     clientOptions
   );
   client.start();
-  let disposable = vscode.commands.registerCommand("spectnet.helloWorld", () => {
-    vscode.window.showInformationMessage("Hello World from SpectNetCode!");
+  let disposable = vscode2.commands.registerCommand("spectnet.helloWorld", () => {
+    vscode2.window.showInformationMessage("Hello World from SpectNetCode!");
   });
   context.subscriptions.push(disposable);
+  context.subscriptions.push(
+    vscode2.commands.registerCommand("spectnet.keyboardTool", () => {
+      KeyboardPanel.createOrShow(context.extensionUri);
+    })
+  );
 }
 function deactivate() {
   if (!client) {

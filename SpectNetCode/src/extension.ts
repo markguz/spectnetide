@@ -6,6 +6,7 @@ import {
     ServerOptions,
     TransportKind
 } from 'vscode-languageclient/node';
+import { KeyboardPanel } from './KeyboardPanel';
 
 let client: LanguageClient;
 
@@ -49,6 +50,12 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     context.subscriptions.push(disposable);
+
+    context.subscriptions.push(
+        vscode.commands.registerCommand('spectnet.keyboardTool', () => {
+            KeyboardPanel.createOrShow(context.extensionUri);
+        })
+    );
 }
 
 export function deactivate(): Thenable<void> | undefined {

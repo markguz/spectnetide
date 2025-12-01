@@ -33,6 +33,10 @@
       {
         "command": "spectnet.helloWorld",
         "title": "Hello World"
+      },
+      {
+        "command": "spectnet.keyboardTool",
+        "title": "SpectNet: Show Keyboard Tool"
       }
     ]
   },
