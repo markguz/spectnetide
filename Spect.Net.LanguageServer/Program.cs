@@ -16,6 +16,7 @@ class Program
                     .AddLanguageProtocolLogging()
                     .SetMinimumLevel(LogLevel.Debug)
                 )
+                .WithHandler<Handlers.TextDocumentHandler>()
                 .WithServices(x => x.AddLogging(b => b.SetMinimumLevel(LogLevel.Debug)))
         );
 
