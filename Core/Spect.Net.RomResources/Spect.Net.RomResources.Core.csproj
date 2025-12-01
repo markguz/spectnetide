@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>Spect.Net.RomResources</RootNamespace>
+    <AssemblyName>Spect.Net.RomResources</AssemblyName>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Roms\**\*" />
+  </ItemGroup>
+
+</Project>

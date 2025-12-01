@@ -329,8 +329,8 @@ namespace Spect.Net.Assembler
                 return null;
             }
 
-            var startIndex = context.start.StartIndex;
-            var stopIndex = context.stop.StopIndex;
+            var startIndex = context.Start.StartIndex;
+            var stopIndex = context.Stop.StopIndex;
             CurrentSourceText = InputStream.GetText(new Interval(startIndex, stopIndex));
 
             CurrentSourceLine = context.Start.Line;
@@ -638,7 +638,7 @@ namespace Spect.Net.Assembler
 
         #region Expression handling
 
-        public override object VisitExpr(Z80AsmParser.ExprContext context)
+        public object VisitExpr(Z80AsmParser.ExprContext context)
         {
             if (context == null) return null;
 
@@ -818,7 +818,7 @@ namespace Spect.Net.Assembler
             return expr;
         }
 
-        public override object VisitLiteral(Z80AsmParser.LiteralContext context)
+        public object VisitLiteral(Z80AsmParser.LiteralContext context)
         {
             if (context == null) return null;
 
@@ -920,7 +920,7 @@ namespace Spect.Net.Assembler
             return new LiteralNode(context, value);
         }
 
-        public override object VisitBuiltinFunctionInvocation(Z80AsmParser.BuiltinFunctionInvocationContext context)
+        public object VisitBuiltinFunctionInvocation(Z80AsmParser.BuiltinFunctionInvocationContext context)
         {
             AddFunction(context);
             string token = null;

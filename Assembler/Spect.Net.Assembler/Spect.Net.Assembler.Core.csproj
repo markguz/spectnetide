@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>Spect.Net.Assembler</RootNamespace>
+    <AssemblyName>Spect.Net.Assembler</AssemblyName>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Antlr4.Runtime.Standard" Version="4.13.1" />
+    <PackageReference Include="Antlr4BuildTasks" Version="12.8.0" PrivateAssets="all" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Antlr4 Include="..\AntlrZ80AsmParserGenerator\ParserGenerator\Z80Asm.g4">
+      <Package>Spect.Net.Assembler.Generated</Package>
+      <Visitor>true</Visitor>
+      <Listener>true</Listener>
+    </Antlr4>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Exclude old generated files -->
+    <Compile Remove="Generated\**\*.cs" />
+  </ItemGroup>
+
+</Project>
