@@ -1,0 +1,117 @@
+body {
+  background-color: var(--vscode-editor-background);
+  color: var(--vscode-editor-foreground);
+  font-family: var(--vscode-font-family);
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  user-select: none;
+}
+
+.keyboard-row {
+  display: flex;
+  margin-bottom: 4px;
+}
+
+.key {
+  background-color: #333;
+  border: 1px solid #555;
+  border-radius: 4px;
+  margin-right: 4px;
+  width: 60px;
+  height: 60px;
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  color: white;
+}
+
+.key:hover {
+  background-color: #444;
+}
+
+.key:active {
+  background-color: #222;
+}
+
+.key-main {
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+}
+
+.key-keyword {
+  font-size: 10px;
+  position: absolute;
+  bottom: 2px;
+  color: #ccc;
+}
+
+.key-sshift {
+  font-size: 10px;
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  color: #d02020; /* Red for Symbol Shift */
+}
+
+.key-ext {
+  font-size: 10px;
+  position: absolute;
+  top: 2px;
+  left: 4px;
+  color: #40a040; /* Green for Extended Mode */
+}
+
+/* Special keys */
+.key-enter {
+  width: 80px;
+}
+
+.key-space {
+  width: 200px;
+}
+
+.key-caps {
+  width: 80px;
+}
+
+.key-sym {
+  width: 80px;
+}
+
+.numeric-mode .key-main {
+  color: white;
+}
+
+/* Colors for top row numbers */
+.color-blue {
+  color: #3030ff;
+}
+.color-red {
+  color: #d02020;
+}
+.color-magenta {
+  color: #c000c0;
+}
+.color-green {
+  color: #40a040;
+}
+.color-cyan {
+  color: #00c0c0;
+}
+.color-yellow {
+  color: #c0c040;
+}
+.color-white {
+  color: #e0e0e0;
+}
+.color-black {
+  color: black;
+  background-color: #ccc;
+}
