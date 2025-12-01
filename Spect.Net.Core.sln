@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spect.Net.Assembler.Core", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spect.Net.SpectrumEmu.Core", "Core\Spect.Net.SpectrumEmu\Spect.Net.SpectrumEmu.Core.csproj", "{00C877DF-397E-4150-AE69-3492B0CF1BE8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spect.Net.LanguageServer", "Spect.Net.LanguageServer\Spect.Net.LanguageServer.csproj", "{A5F1FCB2-EF1B-45A8-9B58-E45BE8E98EB8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,10 @@ Global
 		{00C877DF-397E-4150-AE69-3492B0CF1BE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00C877DF-397E-4150-AE69-3492B0CF1BE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00C877DF-397E-4150-AE69-3492B0CF1BE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5F1FCB2-EF1B-45A8-9B58-E45BE8E98EB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5F1FCB2-EF1B-45A8-9B58-E45BE8E98EB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5F1FCB2-EF1B-45A8-9B58-E45BE8E98EB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5F1FCB2-EF1B-45A8-9B58-E45BE8E98EB8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E5977959-9E0B-4622-B313-8D5FCE6886F2} = {8305F995-2505-4542-A0EF-D53CAE52F61A}
