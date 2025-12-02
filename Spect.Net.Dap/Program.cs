@@ -22,6 +22,11 @@ class Program
                     services.AddSingleton<SpectNetDebugSession>();
                     services.AddSingleton<IJsonRpcHandler, LaunchHandler>();
                     services.AddSingleton<IJsonRpcHandler, AttachHandler>();
+                    services.AddSingleton<IJsonRpcHandler, SetBreakpointsHandler>();
+                    services.AddSingleton<IJsonRpcHandler, ThreadsHandler>();
+                    services.AddSingleton<IJsonRpcHandler, StackTraceHandler>();
+                    services.AddSingleton<IJsonRpcHandler, ScopesHandler>();
+                    services.AddSingleton<IJsonRpcHandler, VariablesHandler>();
                 })
                 .ConfigureLogging(x => x
                     //.AddDebugAdapterProtocolLogging()

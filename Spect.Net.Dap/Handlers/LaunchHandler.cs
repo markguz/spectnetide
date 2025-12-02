@@ -31,6 +31,7 @@ public class LaunchHandler : IJsonRpcRequestHandler<SpectNetLaunchArguments, Lau
         var asmSource = File.ReadAllText(request.Program);
         var assembler = new Z80Assembler();
         var output = assembler.Compile(asmSource);
+        _debugSession.AssemblerOutput = output;
 
         if (output.ErrorCount > 0)
         {

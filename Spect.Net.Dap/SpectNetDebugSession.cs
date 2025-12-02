@@ -1,3 +1,4 @@
+using Spect.Net.Assembler.Assembler;
 using Spect.Net.SpectrumEmu.Machine;
 
 namespace Spect.Net.Dap;
@@ -5,6 +6,7 @@ namespace Spect.Net.Dap;
 public class SpectNetDebugSession
 {
     public SpectrumMachine Machine { get; set; }
+    public AssemblerOutput AssemblerOutput { get; set; }
     
     public void Start()
     {
