@@ -56,6 +56,68 @@ export function activate(context: vscode.ExtensionContext) {
             KeyboardPanel.createOrShow(context.extensionUri);
         })
     );
+
+    // Register configuration provider
+    context.subscriptions.push(vscode.debug.registerDebugConfigurationProvider('spectnet', new SpectNetDebugConfigurationProvider()));
+}
+
+class SpectNetDebugConfigurationProvider implements vscode.DebugConfigurationProvider {
+    resolveDebugConfiguration(folder: vscode.WorkspaceFolder | undefined, config: vscode.DebugConfiguration, token?: vscode.CancellationToken): vscode.ProviderResult<vscode.DebugConfiguration> {
+        // if launch.json is missing or empty
+        if (!config.type && !config.request && !config.name) {
+            const editor = vscode.window.activeTextEditor;
+            if (editor && editor.document.languageId === 'z80asm') {
+                config.type = 'spectnet';
+                config.name = 'Launch';
+                config.request = 'launch';
+                config.program = '${file}';
+                config.stopOnEntry = true;
+            }
+        }
+
+        if (!config.program) {
+            return vscode.window.showInformationMessage("Cannot find a program to debug").then(_ => {
+                return undefined;	// abort launch
+            });
+        }
+
+        // Load spectnet.config.json
+        if (folder) {
+            const configPath = path.join(folder.uri.fsPath, 'spectnet.config.json');
+            try {
+                // We use a simple require or fs.readFileSync here. 
+                // Since we are in an extension, fs is available.
+                const fs = require('fs');
+                if (fs.existsSync(configPath)) {
+                    const projectConfig = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+                    
+                    // Merge configuration
+                    if (!config.model && projectConfig.model) {
+                        config.model = projectConfig.model;
+                    }
+                    if (!config.edition && projectConfig.edition) {
+                        config.edition = projectConfig.edition;
+                    }
+                    
+                    if (projectConfig.compiler) {
+                        if (!config.predefinedSymbols && projectConfig.compiler.predefinedSymbols) {
+                            config.predefinedSymbols = projectConfig.compiler.predefinedSymbols;
+                        }
+                        if (config.defaultStartAddress === undefined && projectConfig.compiler.defaultStartAddress !== undefined) {
+                            config.defaultStartAddress = projectConfig.compiler.defaultStartAddress;
+                        }
+                        if (config.defaultDisplacement === undefined && projectConfig.compiler.defaultDisplacement !== undefined) {
+                            config.defaultDisplacement = projectConfig.compiler.defaultDisplacement;
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error("Failed to load spectnet.config.json", error);
+            }
+        }
+
+        return config;
+    }
 }
 
 export function deactivate(): Thenable<void> | undefined {
