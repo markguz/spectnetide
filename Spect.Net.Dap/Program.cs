@@ -27,6 +27,12 @@ class Program
                     services.AddSingleton<IJsonRpcHandler, StackTraceHandler>();
                     services.AddSingleton<IJsonRpcHandler, ScopesHandler>();
                     services.AddSingleton<IJsonRpcHandler, VariablesHandler>();
+                    services.AddSingleton<IJsonRpcHandler, ConfigurationDoneHandler>();
+                    services.AddSingleton<IJsonRpcHandler, PauseHandler>();
+                    services.AddSingleton<IJsonRpcHandler, ContinueHandler>();
+                    services.AddSingleton<IJsonRpcHandler, NextHandler>();
+                    services.AddSingleton<IJsonRpcHandler, StepInHandler>();
+                    services.AddSingleton<IJsonRpcHandler, StepOutHandler>();
                 })
                 .ConfigureLogging(x => x
                     //.AddDebugAdapterProtocolLogging()

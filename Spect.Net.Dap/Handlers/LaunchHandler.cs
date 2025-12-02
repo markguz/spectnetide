@@ -48,8 +48,9 @@ public class LaunchHandler : IJsonRpcRequestHandler<SpectNetLaunchArguments, Lau
         SpectrumMachine.RegisterProvider<IKempstonProvider>(() => new DapKempstonProvider());
         SpectrumMachine.RegisterProvider<ISpectrumDebugInfoProvider>(() => new DapDebugInfoProvider());
 
-        var machine = SpectrumMachine.CreateMachine(SpectrumModels.ZX_SPECTRUM_48, SpectrumModels.PAL);
-        _debugSession.Machine = machine;
+        // --- Create the machine
+        var machine = SpectrumMachine.CreateMachine(request.Model ?? "ZX Spectrum 48K", request.Edition ?? "PAL");
+        _debugSession.SetMachine(machine);
 
         // 3. Inject Code
         foreach (var segment in output.Segments)
@@ -77,8 +78,9 @@ public class LaunchHandler : IJsonRpcRequestHandler<SpectNetLaunchArguments, Lau
             action();
             return Task.CompletedTask;
         };
-
-        machine.Start(new ExecuteCycleOptions(EmulationMode.Continuous));
+        // --- Start the machine
+        // We don't start it here. We wait for ConfigurationDone.
+        // machine.Start(new ExecuteCycleOptions(EmulationMode.Continuous));
 
         return Task.FromResult(new LaunchResponse());
     }
