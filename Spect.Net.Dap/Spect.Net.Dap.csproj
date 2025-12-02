@@ -3,6 +3,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Core\Spect.Net.SpectrumEmu\Spect.Net.SpectrumEmu.Core.csproj" />
     <ProjectReference Include="..\Assembler\Spect.Net.Assembler\Spect.Net.Assembler.Core.csproj" />
+    <ProjectReference Include="..\Core\Spect.Net.RomResources\Spect.Net.RomResources.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
