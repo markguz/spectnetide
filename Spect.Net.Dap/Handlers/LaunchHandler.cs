@@ -30,7 +30,20 @@ public class LaunchHandler : IJsonRpcRequestHandler<SpectNetLaunchArguments, Lau
         // 1. Compile the program
         var asmSource = File.ReadAllText(request.Program);
         var assembler = new Z80Assembler();
-        var output = assembler.Compile(asmSource);
+        
+        var options = new AssemblerOptions
+        {
+            CurrentModel = ParseModel(request.Model),
+            DefaultStartAddress = request.DefaultStartAddress,
+            DefaultDisplacement = request.DefaultDisplacement
+        };
+
+        if (request.PredefinedSymbols != null)
+        {
+            options.PredefinedSymbols.AddRange(request.PredefinedSymbols);
+        }
+
+        var output = assembler.Compile(asmSource, options);
         _debugSession.AssemblerOutput = output;
 
         if (output.ErrorCount > 0)
@@ -83,5 +96,34 @@ public class LaunchHandler : IJsonRpcRequestHandler<SpectNetLaunchArguments, Lau
         // machine.Start(new ExecuteCycleOptions(EmulationMode.Continuous));
 
         return Task.FromResult(new LaunchResponse());
+    }
+
+    private SpectrumModelType ParseModel(string? model)
+    {
+        if (string.IsNullOrWhiteSpace(model))
+        {
+            return SpectrumModelType.Spectrum48;
+        }
+
+        switch (model.ToUpper())
+        {
+            case "ZX SPECTRUM 48K":
+            case "SPECTRUM48":
+                return SpectrumModelType.Spectrum48;
+            case "ZX SPECTRUM 128K":
+            case "SPECTRUM128":
+            case "ZX SPECTRUM +2":
+                return SpectrumModelType.Spectrum128;
+            case "ZX SPECTRUM +2A":
+            case "ZX SPECTRUM +3":
+            case "ZX SPECTRUM +3E":
+            case "SPECTRUMP3":
+                return SpectrumModelType.SpectrumP3;
+            case "ZX SPECTRUM NEXT":
+            case "NEXT":
+                return SpectrumModelType.Next;
+            default:
+                return SpectrumModelType.Spectrum48;
+        }
     }
 }

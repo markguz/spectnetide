@@ -45,9 +45,6 @@
         "label": "SpectNet Debugger",
         "program": "./dist/debugAdapter.js",
         "runtime": "node",
-        "languages": [
-          "z80asm"
-        ],
         "configurationAttributes": {
           "launch": {
             "required": [
@@ -56,13 +53,23 @@
             "properties": {
               "program": {
                 "type": "string",
-                "description": "Path to the Z80 assembly file to debug",
-                "default": "${workspaceFolder}/program.z80asm"
+                "description": "Path to the Z80 program file.",
+                "default": "${workspaceFolder}/program.z80"
               },
               "stopOnEntry": {
                 "type": "boolean",
                 "description": "Automatically stop after launch.",
                 "default": true
+              },
+              "model": {
+                "type": "string",
+                "description": "The ZX Spectrum model to emulate.",
+                "default": "ZX Spectrum 48K"
+              },
+              "edition": {
+                "type": "string",
+                "description": "The edition of the model (e.g., PAL, NTSC).",
+                "default": "PAL"
               }
             }
           }
@@ -71,11 +78,17 @@
           {
             "type": "spectnet",
             "request": "launch",
-            "name": "SpectNet: Launch Program",
-            "program": "${workspaceFolder}/program.z80asm",
+            "name": "Launch Z80 Program",
+            "program": "${workspaceFolder}/program.z80",
             "stopOnEntry": true
           }
         ]
+      }
+    ],
+    "jsonValidation": [
+      {
+        "fileMatch": "spectnet.config.json",
+        "url": "./spectnet.schema.json"
       }
     ]
   },

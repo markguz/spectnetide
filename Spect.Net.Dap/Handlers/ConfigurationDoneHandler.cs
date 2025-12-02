@@ -28,8 +28,9 @@ public class ConfigurationDoneHandler : IJsonRpcRequestHandler<ConfigurationDone
         if (_debugSession.Machine != null)
         {
             var stopOnEntry = _debugSession.LaunchArguments?.StopOnEntry ?? false;
+            var noDebug = _debugSession.LaunchArguments?.NoDebug ?? false;
             
-            if (stopOnEntry)
+            if (stopOnEntry && !noDebug)
             {
                 // Start and immediately pause at entry point.
                 // We use UntilExecutionPoint with the current PC (Entry Address)
