@@ -38,6 +38,45 @@
         "command": "spectnet.keyboardTool",
         "title": "SpectNet: Show Keyboard Tool"
       }
+    ],
+    "debuggers": [
+      {
+        "type": "spectnet",
+        "label": "SpectNet Debugger",
+        "program": "./dist/debugAdapter.js",
+        "runtime": "node",
+        "languages": [
+          "z80asm"
+        ],
+        "configurationAttributes": {
+          "launch": {
+            "required": [
+              "program"
+            ],
+            "properties": {
+              "program": {
+                "type": "string",
+                "description": "Path to the Z80 assembly file to debug",
+                "default": "${workspaceFolder}/program.z80asm"
+              },
+              "stopOnEntry": {
+                "type": "boolean",
+                "description": "Automatically stop after launch.",
+                "default": true
+              }
+            }
+          }
+        },
+        "initialConfigurations": [
+          {
+            "type": "spectnet",
+            "request": "launch",
+            "name": "SpectNet: Launch Program",
+            "program": "${workspaceFolder}/program.z80asm",
+            "stopOnEntry": true
+          }
+        ]
+      }
     ]
   },
   "scripts": {
@@ -63,6 +102,8 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "vscode-debugadapter": "^1.51.0",
+    "vscode-debugprotocol": "^1.51.0",
     "vscode-languageclient": "^9.0.1"
   }
 }
