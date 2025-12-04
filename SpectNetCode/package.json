@@ -1,0 +1,142 @@
+{
+  "name": "spectnetcode",
+  "displayName": "SpectNetCode",
+  "description": "ZX Spectrum IDE for VS Code",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Debuggers"
+  ],
+  "activationEvents": [
+    "onLanguage:z80asm"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "z80asm",
+        "aliases": [
+          "Z80 Assembler",
+          "z80asm"
+        ],
+        "extensions": [
+          ".z80asm",
+          ".z80"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "spectnet.helloWorld",
+        "title": "Hello World"
+      },
+      {
+        "command": "spectnet.keyboardTool",
+        "title": "SpectNet: Show Keyboard Tool"
+      },
+      {
+        "command": "spectnet.emulator",
+        "title": "SpectNet: Show Emulator"
+      },
+      {
+        "command": "spectnet.registers",
+        "title": "SpectNet: Show Registers"
+      },
+      {
+        "command": "spectnet.disassembly",
+        "title": "SpectNet: Show Disassembly"
+      },
+      {
+        "command": "spectnet.memory",
+        "title": "SpectNet: Show Memory"
+      },
+      {
+        "command": "spectnet.tape",
+        "title": "SpectNet: Show Tape Explorer"
+      }
+    ],
+    "debuggers": [
+      {
+        "type": "spectnet",
+        "label": "SpectNet Debugger",
+        "program": "./dist/debugAdapter.js",
+        "runtime": "node",
+        "configurationAttributes": {
+          "launch": {
+            "required": [
+              "program"
+            ],
+            "properties": {
+              "program": {
+                "type": "string",
+                "description": "Path to the Z80 program file.",
+                "default": "${workspaceFolder}/program.z80"
+              },
+              "stopOnEntry": {
+                "type": "boolean",
+                "description": "Automatically stop after launch.",
+                "default": true
+              },
+              "model": {
+                "type": "string",
+                "description": "The ZX Spectrum model to emulate.",
+                "default": "ZX Spectrum 48K"
+              },
+              "edition": {
+                "type": "string",
+                "description": "The edition of the model (e.g., PAL, NTSC).",
+                "default": "PAL"
+              }
+            }
+          }
+        },
+        "initialConfigurations": [
+          {
+            "type": "spectnet",
+            "request": "launch",
+            "name": "Launch Z80 Program",
+            "program": "${workspaceFolder}/program.z80",
+            "stopOnEntry": true
+          }
+        ]
+      }
+    ],
+    "jsonValidation": [
+      {
+        "fileMatch": "spectnet.config.json",
+        "url": "./spectnet.schema.json"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "node esbuild.js",
+    "watch": "node esbuild.js --watch",
+    "package": "node esbuild.js --production",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.6",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "@vscode/test-electron": "^2.3.8",
+    "esbuild": "^0.27.0",
+    "eslint": "^8.56.0",
+    "glob": "^10.5.0",
+    "mocha": "^10.2.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "vscode-debugadapter": "^1.51.0",
+    "vscode-debugprotocol": "^1.51.0",
+    "vscode-languageclient": "^9.0.1"
+  }
+}
