@@ -7,17 +7,24 @@ using Spect.Net.SpectrumEmu.Devices.Tape;
 using Spect.Net.SpectrumEmu.Devices.Tape.Tzx;
 using Spect.Net.SpectrumEmu.Disassembler;
 using Spect.Net.Dap.Handlers;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 
 namespace Spect.Net.Dap;
 
 public class SpectNetDebugSession
 {
-    private readonly IDebugAdapterServer _debugAdapterServer;
+    private IDebugAdapterServer? _debugAdapterServer;
 
-    public SpectNetDebugSession(IDebugAdapterServer debugAdapterServer)
+    private IDebugAdapterServer Server => _debugAdapterServer!;
+
+    public SpectNetDebugSession()
     {
-        _debugAdapterServer = debugAdapterServer;
+    }
+
+    public void Initialize(IDebugAdapterServer server)
+    {
+        _debugAdapterServer = server;
     }
 
     public SpectrumMachine? Machine { get; private set; }
@@ -36,7 +43,7 @@ public class SpectNetDebugSession
         switch (e.NewState)
         {
             case VmState.Paused:
-                _debugAdapterServer.SendNotification(new StoppedEvent
+                Server.SendNotification(new StoppedEvent
                 {
                     Reason = StoppedEventReason.Pause,
                     ThreadId = 1,
@@ -48,14 +55,14 @@ public class SpectNetDebugSession
                 SendTapeInfo();
                 break;
             case VmState.Running:
-                _debugAdapterServer.SendNotification(new ContinuedEvent
+                Server.SendNotification(new ContinuedEvent
                 {
                     ThreadId = 1,
                     AllThreadsContinued = true
                 });
                 break;
             case VmState.Stopped:
-                _debugAdapterServer.SendNotification(new TerminatedEvent());
+                Server.SendNotification(new TerminatedEvent());
                 break;
         }
     }
@@ -80,7 +87,7 @@ public class SpectNetDebugSession
             DE_ = $"0x{regs._DE_:X4}",
             HL_ = $"0x{regs._HL_:X4}"
         };
-        _debugAdapterServer.SendNotification("spectnet/registers", data);
+        Server.SendNotification("spectnet/registers", data);
     }
 
     private void SendDisassembly()
@@ -106,14 +113,14 @@ public class SpectNetDebugSession
             });
         }
 
-        _debugAdapterServer.SendNotification("spectnet/disassembly", new { pc = pc, items = items });
+        Server.SendNotification("spectnet/disassembly", new { pc = pc, items = items });
     }
 
     private void SendMemory()
     {
         var memoryContents = Machine.SpectrumVm.MemoryDevice.CloneMemory();
         var base64 = Convert.ToBase64String(memoryContents);
-        _debugAdapterServer.SendNotification("spectnet/memory", new { startAddress = 0x0000, memory = base64 });
+        Server.SendNotification("spectnet/memory", new { startAddress = 0x0000, memory = base64 });
     }
 
     private void SendTapeInfo()
@@ -121,7 +128,7 @@ public class SpectNetDebugSession
         var tapeDevice = Machine.SpectrumVm.TapeDevice as TapeDevice;
         if (tapeDevice?.TapeFilePlayer == null)
         {
-            _debugAdapterServer.SendNotification("spectnet/tape", new object[0]);
+            Server.SendNotification("spectnet/tape", new object[0]);
             return;
         }
 
@@ -208,13 +215,13 @@ public class SpectNetDebugSession
         }
         
         // Re-thinking: Let's just send the list and the current index in the wrapper object.
-        _debugAdapterServer.SendNotification("spectnet/tape", new { blocks = blocks, currentIndex = currentIndex });
+        Server.SendNotification("spectnet/tape", new { blocks = blocks, currentIndex = currentIndex });
     }
 
     private void OnVmScreenRefreshed(object? sender, VmScreenRefreshedEventArgs e)
     {
         var base64 = Convert.ToBase64String(e.Buffer);
-        _debugAdapterServer.SendNotification("spectnet/videoFrame", new { data = base64 });
+        Server.SendNotification("spectnet/videoFrame", new { data = base64 });
     }
     
     public void Start()

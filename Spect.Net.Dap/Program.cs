@@ -13,13 +13,21 @@ class Program
 {
     static async Task Main(string[] args)
     {
+        SpectNetDebugSession? session = null;
+
         var server = await OmniSharp.Extensions.DebugAdapter.Server.DebugAdapterServer.From(options =>
             options
                 .WithInput(Console.OpenStandardInput())
                 .WithOutput(Console.OpenStandardOutput())
                 .WithServices(services =>
                 {
-                    services.AddSingleton<SpectNetDebugSession>();
+                    services.AddSingleton<SpectNetDebugSession>(sp => 
+                    {
+                        session = new SpectNetDebugSession();
+                        return session;
+                    });
+                    services.AddSingleton<IJsonRpcHandler, LaunchHandler>();
+                    services.AddSingleton<IJsonRpcHandler, AttachHandler>();
                     services.AddSingleton<IJsonRpcHandler, LaunchHandler>();
                     services.AddSingleton<IJsonRpcHandler, AttachHandler>();
                     services.AddSingleton<IJsonRpcHandler, SetBreakpointsHandler>();
@@ -39,6 +47,11 @@ class Program
                     .SetMinimumLevel(LogLevel.Debug)
                 )
         );
+
+        if (session != null)
+        {
+            session.Initialize(server);
+        }
 
         await Task.Delay(-1);
     }
