@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Spect.Net.SpectrumEmu\Spect.Net.SpectrumEmu.Core.csproj" />
+    <ProjectReference Include="..\Assembler\Spect.Net.Assembler\Spect.Net.Assembler.Core.csproj" />
+    <ProjectReference Include="..\Core\Spect.Net.RomResources\Spect.Net.RomResources.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="OmniSharp.Extensions.DebugAdapter" Version="0.19.9" />
+    <PackageReference Include="OmniSharp.Extensions.DebugAdapter.Server" Version="0.19.9" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Diagnostics;
+using System.Threading;
 using Spect.Net.SpectrumEmu.Abstraction.Providers;
 
 namespace Spect.Net.SpectrumEmu.Providers
@@ -9,15 +10,11 @@ namespace Spect.Net.SpectrumEmu.Providers
     /// </summary>
     public class ClockProvider : VmComponentProviderBase, IClockProvider
     {
-        private long _frequency;
-
         /// <summary>
         /// Initializes the provider
         /// </summary>
         public ClockProvider()
         {
-            // ReSharper disable once VirtualMemberCallInConstructor
-            Reset();
         }
 
         /// <summary>
@@ -25,24 +22,18 @@ namespace Spect.Net.SpectrumEmu.Providers
         /// </summary>
         public override void Reset()
         {
-            QueryPerformanceFrequency(out var frequency);
-            _frequency = frequency;
         }
 
         /// <summary>
         /// Retrieves the frequency of the clock. This value shows new
         /// number of clock ticks per second.
         /// </summary>
-        public long GetFrequency() => _frequency;
+        public long GetFrequency() => Stopwatch.Frequency;
 
         /// <summary>
         /// Retrieves the current counter value of the clock.
         /// </summary>
-        public long GetCounter()
-        {
-            QueryPerformanceCounter(out long perfValue);
-            return perfValue;
-        }
+        public long GetCounter() => Stopwatch.GetTimestamp();
 
         /// <summary>
         /// Waits until the specified counter value is reached
@@ -52,16 +43,16 @@ namespace Spect.Net.SpectrumEmu.Providers
         public void WaitUntil(long counterValue, CancellationToken token)
         {
             // --- Calculate the number of milliseconds to wait
-            var millisec = _frequency / 1000;
+            var frequency = GetFrequency();
+            var millisec = frequency / 1000;
 
             // --- Wait until we have up to 4 milliseconds left
             while (!token.IsCancellationRequested)
             {
-                var millisecs = (counterValue - GetCounter()) / millisec;
-                if (millisecs < 0)
-                {
-                    return;
-                }
+                var current = GetCounter();
+                if (current >= counterValue) return;
+                
+                var millisecs = (counterValue - current) / millisec;
                 if (millisecs < 4) break;
                 Thread.Sleep(2);
             }
@@ -69,50 +60,9 @@ namespace Spect.Net.SpectrumEmu.Providers
             // --- Use SpinWait
             while (!token.IsCancellationRequested)
             {
-                if (counterValue < GetCounter()) break;
+                if (counterValue <= GetCounter()) break;
                 Thread.SpinWait(1);
             }
         }
-
-        /// <summary>
-        /// QueryPerformanceCounter function
-        /// Retrieves the current value of the performance counter, which is 
-        /// a high resolution (less than 1us) time stamp that can be used for 
-        /// time-interval measurements.
-        /// </summary>
-        /// <param name="lpPerformanceCount">
-        /// A pointer to a variable that receives the current performance-
-        /// counter value, in counts.
-        /// </param>
-        /// <returns>
-        /// If the function succeeds, the return value is nonzero. On systems 
-        /// that run Windows XP or later, the function will always succeed and 
-        /// will thus never return zero.
-        /// </returns>
-        [System.Runtime.InteropServices.DllImport("Kernel32.dll")]
-        public static extern bool QueryPerformanceCounter(
-            out long lpPerformanceCount);
-
-        /// <summary>
-        /// Retrieves the frequency of the performance counter. The frequency 
-        /// of the performance counter is fixed at system boot and is consistent 
-        /// across all processors. Therefore, the frequency need only be queried 
-        /// upon application initialization, and the result can be cached.
-        /// </summary>
-        /// <param name="lpFrequency">
-        /// A pointer to a variable that receives the current performance-counter 
-        /// frequency, in counts per second. If the installed hardware doesn't 
-        /// support a high-resolution performance counter, this parameter can be 
-        /// zero (this will not occur on systems that run Windows XP or later).
-        /// </param>
-        /// <returns>
-        /// If the installed hardware supports a high-resolution performance 
-        /// counter, the return value is nonzero. On systems that run Windows XP 
-        /// or later, the function will always succeed and will thus never 
-        /// return zero.
-        /// </returns>
-        [System.Runtime.InteropServices.DllImport("Kernel32.dll")]
-        public static extern bool QueryPerformanceFrequency(
-            out long lpFrequency);
     }
 }

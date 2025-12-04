@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using Antlr4.Runtime;
 using Spect.Net.EvalParser.SyntaxTree;
 
@@ -70,7 +71,7 @@ namespace Spect.Net.EvalParser.Generated
             /// the parser was able to recover in line without exiting the
             /// surrounding rule.
             /// </param>
-            public void SyntaxError(IRecognizer recognizer, IToken offendingSymbol, int line, int charPositionInLine, string msg,
+            public void SyntaxError(TextWriter output, IRecognizer recognizer, IToken offendingSymbol, int line, int charPositionInLine, string msg,
                 RecognitionException e)
             {
                 Parser.SyntaxErrors.Add(new Z80EvalParserErrorInfo

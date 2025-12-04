@@ -1,0 +1,63 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "SpectNetIDE Project Configuration",
+    "type": "object",
+    "properties": {
+        "model": {
+            "type": "string",
+            "description": "The ZX Spectrum model to emulate.",
+            "default": "ZX Spectrum 48K",
+            "enum": [
+                "ZX Spectrum 48K",
+                "ZX Spectrum 128K",
+                "ZX Spectrum +2",
+                "ZX Spectrum +2A",
+                "ZX Spectrum +3",
+                "ZX Spectrum +3E",
+                "ZX Spectrum Next"
+            ]
+        },
+        "edition": {
+            "type": "string",
+            "description": "The edition of the model (e.g., PAL, NTSC).",
+            "default": "PAL",
+            "enum": ["PAL", "NTSC"]
+        },
+        "compiler": {
+            "type": "object",
+            "description": "Compiler options for the Z80 assembler.",
+            "properties": {
+                "outputDirectory": {
+                    "type": "string",
+                    "description": "The default output directory for compiled files."
+                },
+                "exportDebugInfo": {
+                    "type": "boolean",
+                    "description": "Whether to export debug information.",
+                    "default": true
+                },
+                "predefinedSymbols": {
+                    "type": "array",
+                    "description": "Predefined compilation symbols.",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "defaultStartAddress": {
+                    "type": "integer",
+                    "description": "The default start address of the compilation.",
+                    "minimum": 0,
+                    "maximum": 65535
+                },
+                "defaultDisplacement": {
+                    "type": "integer",
+                    "description": "The default displacement address of the compilation."
+                }
+            }
+        },
+        "defaultProgram": {
+            "type": "string",
+            "description": "The default program file to run/debug."
+        }
+    }
+}

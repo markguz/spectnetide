@@ -1,0 +1,129 @@
+using MediatR;
+using OmniSharp.Extensions.DebugAdapter.Protocol;
+using OmniSharp.Extensions.DebugAdapter.Protocol.Requests;
+using OmniSharp.Extensions.DebugAdapter.Protocol.Server;
+using OmniSharp.Extensions.JsonRpc;
+using Spect.Net.Assembler.Assembler;
+using Spect.Net.Dap.Providers;
+using Spect.Net.SpectrumEmu.Abstraction.Models;
+using Spect.Net.SpectrumEmu.Abstraction.Providers;
+using Spect.Net.SpectrumEmu.Machine;
+using Spect.Net.SpectrumEmu;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Spect.Net.Dap.Handlers;
+
+[Method(RequestNames.Launch)]
+public class LaunchHandler : IJsonRpcRequestHandler<SpectNetLaunchArguments, LaunchResponse>
+{
+    private readonly SpectNetDebugSession _debugSession;
+
+    public LaunchHandler(SpectNetDebugSession debugSession)
+    {
+        _debugSession = debugSession;
+    }
+
+    public Task<LaunchResponse> Handle(SpectNetLaunchArguments request, CancellationToken cancellationToken)
+    {
+        // 1. Compile the program
+        var asmSource = File.ReadAllText(request.Program);
+        var assembler = new Z80Assembler();
+        
+        var options = new AssemblerOptions
+        {
+            CurrentModel = ParseModel(request.Model),
+            DefaultStartAddress = request.DefaultStartAddress,
+            DefaultDisplacement = request.DefaultDisplacement
+        };
+
+        if (request.PredefinedSymbols != null)
+        {
+            options.PredefinedSymbols.AddRange(request.PredefinedSymbols);
+        }
+
+        var output = assembler.Compile(asmSource, options);
+        _debugSession.AssemblerOutput = output;
+
+        if (output.ErrorCount > 0)
+        {
+            // TODO: Report errors
+            return Task.FromResult(new LaunchResponse());
+        }
+
+        // 2. Initialize Machine
+        SpectrumMachine.Reset();
+        SpectrumMachine.RegisterProvider<IRomProvider>(() => new DapRomProvider());
+        SpectrumMachine.RegisterProvider<IKeyboardProvider>(() => new DapKeyboardProvider());
+        SpectrumMachine.RegisterProvider<IBeeperProvider>(() => new DapBeeperProvider());
+        SpectrumMachine.RegisterProvider<ITapeProvider>(() => new DapTapeProvider());
+        SpectrumMachine.RegisterProvider<IKempstonProvider>(() => new DapKempstonProvider());
+        SpectrumMachine.RegisterProvider<ISpectrumDebugInfoProvider>(() => new DapDebugInfoProvider());
+
+        // --- Create the machine
+        var machine = SpectrumMachine.CreateMachine(request.Model ?? "ZX Spectrum 48K", request.Edition ?? "PAL");
+        _debugSession.SetMachine(machine);
+
+        // 3. Inject Code
+        foreach (var segment in output.Segments)
+        {
+            var addr = segment.StartAddress;
+            foreach (var b in segment.EmittedCode)
+            {
+                machine.SpectrumVm.MemoryDevice.Write(addr++, b);
+            }
+        }
+        
+        // Set entry point if available (e.g. from 'ent' directive or default)
+        if (output.EntryAddress != null)
+        {
+             machine.SpectrumVm.Cpu.Registers.PC = output.EntryAddress.Value;
+        }
+
+        // 4. Start Machine
+        // We start it in a background thread, but we need to handle the execution loop.
+        // For DAP, we usually want to run until a breakpoint or pause.
+        // SpectrumMachine.Start runs in a separate thread.
+        
+        machine.ExecuteOnMainThread = (action) => 
+        {
+            action();
+            return Task.CompletedTask;
+        };
+        // --- Start the machine
+        // We don't start it here. We wait for ConfigurationDone.
+        // machine.Start(new ExecuteCycleOptions(EmulationMode.Continuous));
+
+        return Task.FromResult(new LaunchResponse());
+    }
+
+    private SpectrumModelType ParseModel(string? model)
+    {
+        if (string.IsNullOrWhiteSpace(model))
+        {
+            return SpectrumModelType.Spectrum48;
+        }
+
+        switch (model.ToUpper())
+        {
+            case "ZX SPECTRUM 48K":
+            case "SPECTRUM48":
+                return SpectrumModelType.Spectrum48;
+            case "ZX SPECTRUM 128K":
+            case "SPECTRUM128":
+            case "ZX SPECTRUM +2":
+                return SpectrumModelType.Spectrum128;
+            case "ZX SPECTRUM +2A":
+            case "ZX SPECTRUM +3":
+            case "ZX SPECTRUM +3E":
+            case "SPECTRUMP3":
+                return SpectrumModelType.SpectrumP3;
+            case "ZX SPECTRUM NEXT":
+            case "NEXT":
+                return SpectrumModelType.Next;
+            default:
+                return SpectrumModelType.Spectrum48;
+        }
+    }
+}

@@ -1,0 +1,56 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{8305F995-2505-4542-A0EF-D53CAE52F61A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spect.Net.RomResources.Core", "Core\Spect.Net.RomResources\Spect.Net.RomResources.Core.csproj", "{E5977959-9E0B-4622-B313-8D5FCE6886F2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assembler", "Assembler", "{A1148FD0-603B-4D95-9724-20492E2F2B41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spect.Net.EvalParser.Core", "Assembler\Spect.Net.EvalParser\Spect.Net.EvalParser.Core.csproj", "{E2243491-75ED-4CD0-8EEC-9828A6290A81}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spect.Net.Assembler.Core", "Assembler\Spect.Net.Assembler\Spect.Net.Assembler.Core.csproj", "{82EDF858-82F5-4659-A57A-57F9D2A38583}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spect.Net.SpectrumEmu.Core", "Core\Spect.Net.SpectrumEmu\Spect.Net.SpectrumEmu.Core.csproj", "{00C877DF-397E-4150-AE69-3492B0CF1BE8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spect.Net.LanguageServer", "Spect.Net.LanguageServer\Spect.Net.LanguageServer.csproj", "{A5F1FCB2-EF1B-45A8-9B58-E45BE8E98EB8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E5977959-9E0B-4622-B313-8D5FCE6886F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5977959-9E0B-4622-B313-8D5FCE6886F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5977959-9E0B-4622-B313-8D5FCE6886F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5977959-9E0B-4622-B313-8D5FCE6886F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2243491-75ED-4CD0-8EEC-9828A6290A81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2243491-75ED-4CD0-8EEC-9828A6290A81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2243491-75ED-4CD0-8EEC-9828A6290A81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2243491-75ED-4CD0-8EEC-9828A6290A81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82EDF858-82F5-4659-A57A-57F9D2A38583}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82EDF858-82F5-4659-A57A-57F9D2A38583}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82EDF858-82F5-4659-A57A-57F9D2A38583}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82EDF858-82F5-4659-A57A-57F9D2A38583}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00C877DF-397E-4150-AE69-3492B0CF1BE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00C877DF-397E-4150-AE69-3492B0CF1BE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00C877DF-397E-4150-AE69-3492B0CF1BE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00C877DF-397E-4150-AE69-3492B0CF1BE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5F1FCB2-EF1B-45A8-9B58-E45BE8E98EB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5F1FCB2-EF1B-45A8-9B58-E45BE8E98EB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5F1FCB2-EF1B-45A8-9B58-E45BE8E98EB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5F1FCB2-EF1B-45A8-9B58-E45BE8E98EB8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E5977959-9E0B-4622-B313-8D5FCE6886F2} = {8305F995-2505-4542-A0EF-D53CAE52F61A}
+		{E2243491-75ED-4CD0-8EEC-9828A6290A81} = {A1148FD0-603B-4D95-9724-20492E2F2B41}
+		{82EDF858-82F5-4659-A57A-57F9D2A38583} = {A1148FD0-603B-4D95-9724-20492E2F2B41}
+		{00C877DF-397E-4150-AE69-3492B0CF1BE8} = {8305F995-2505-4542-A0EF-D53CAE52F61A}
+	EndGlobalSection
+EndGlobal
