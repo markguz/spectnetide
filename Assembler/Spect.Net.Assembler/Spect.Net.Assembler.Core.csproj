@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>Spect.Net.Assembler</RootNamespace>
     <AssemblyName>Spect.Net.Assembler</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>

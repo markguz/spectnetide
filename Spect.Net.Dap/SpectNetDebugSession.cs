@@ -140,7 +140,7 @@ public class SpectNetDebugSession
                 isCurrent = false // Will set below
             };
 
-            if (block is TzxStandardSpeedDataBlock stdBlockSpectNetCode/src/extension.ts)
+            if (block is TzxStandardSpeedDataBlock stdBlock)
             {
                 info = new
                 {
@@ -212,7 +212,7 @@ public class SpectNetDebugSession
     }
 
     private void OnVmScreenRefreshed(object? sender, VmScreenRefreshedEventArgs e)
-    SpectNetCode/src/extension.ts{
+    {
         var base64 = Convert.ToBase64String(e.Buffer);
         _debugAdapterServer.SendNotification("spectnet/videoFrame", new { data = base64 });
     }
