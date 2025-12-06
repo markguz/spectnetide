@@ -15,12 +15,10 @@ namespace Spect.Net.Dap.Handlers;
 public class ConfigurationDoneHandler : IJsonRpcRequestHandler<ConfigurationDoneArguments, ConfigurationDoneResponse>
 {
     private readonly SpectNetDebugSession _debugSession;
-    private readonly IDebugAdapterServer _debugAdapterServer;
-
-    public ConfigurationDoneHandler(SpectNetDebugSession debugSession, IDebugAdapterServer debugAdapterServer)
+    
+    public ConfigurationDoneHandler(SpectNetDebugSession debugSession)
     {
         _debugSession = debugSession;
-        _debugAdapterServer = debugAdapterServer;
     }
 
     public Task<ConfigurationDoneResponse> Handle(ConfigurationDoneArguments request, CancellationToken cancellationToken)

@@ -13,46 +13,58 @@ class Program
 {
     static async Task Main(string[] args)
     {
-        SpectNetDebugSession? session = null;
+        var session = new SpectNetDebugSession();
+        var launchHandler = new LaunchHandler(session);
+        var attachHandler = new AttachHandler();
+        var setBreakpointsHandler = new SetBreakpointsHandler(session);
+        var threadsHandler = new ThreadsHandler();
+        var stackTraceHandler = new StackTraceHandler(session);
+        var scopesHandler = new ScopesHandler();
+        var variablesHandler = new VariablesHandler(session);
+        var configurationDoneHandler = new ConfigurationDoneHandler(session);
+        var pauseHandler = new PauseHandler(session);
+        var continueHandler = new ContinueHandler(session);
+        var nextHandler = new NextHandler(session);
+        var stepInHandler = new StepInHandler(session);
+        var stepOutHandler = new StepOutHandler(session);
 
-        var server = await OmniSharp.Extensions.DebugAdapter.Server.DebugAdapterServer.From(options =>
-            options
-                .WithInput(Console.OpenStandardInput())
-                .WithOutput(Console.OpenStandardOutput())
-                .WithServices(services =>
-                {
-                    services.AddSingleton<SpectNetDebugSession>(sp => 
-                    {
-                        session = new SpectNetDebugSession();
-                        return session;
-                    });
-                    services.AddSingleton<IJsonRpcHandler, LaunchHandler>();
-                    services.AddSingleton<IJsonRpcHandler, AttachHandler>();
-                    services.AddSingleton<IJsonRpcHandler, LaunchHandler>();
-                    services.AddSingleton<IJsonRpcHandler, AttachHandler>();
-                    services.AddSingleton<IJsonRpcHandler, SetBreakpointsHandler>();
-                    services.AddSingleton<IJsonRpcHandler, ThreadsHandler>();
-                    services.AddSingleton<IJsonRpcHandler, StackTraceHandler>();
-                    services.AddSingleton<IJsonRpcHandler, ScopesHandler>();
-                    services.AddSingleton<IJsonRpcHandler, VariablesHandler>();
-                    services.AddSingleton<IJsonRpcHandler, ConfigurationDoneHandler>();
-                    services.AddSingleton<IJsonRpcHandler, PauseHandler>();
-                    services.AddSingleton<IJsonRpcHandler, ContinueHandler>();
-                    services.AddSingleton<IJsonRpcHandler, NextHandler>();
-                    services.AddSingleton<IJsonRpcHandler, StepInHandler>();
-                    services.AddSingleton<IJsonRpcHandler, StepOutHandler>();
-                })
-                .ConfigureLogging(x => x
-                    //.AddDebugAdapterProtocolLogging()
-                    .SetMinimumLevel(LogLevel.Debug)
-                )
-        );
-
-        if (session != null)
+        try 
         {
-            session.Initialize(server);
-        }
+            var server = await OmniSharp.Extensions.DebugAdapter.Server.DebugAdapterServer.From(options =>
+            {
+                options
+                    .WithInput(Console.OpenStandardInput())
+                    .WithOutput(Console.OpenStandardOutput())
+                    .WithServices(services =>
+                    {
+                        services.AddSingleton(session);
+                        services.AddSingleton<IJsonRpcHandler>(launchHandler);
+                        services.AddSingleton<IJsonRpcHandler>(attachHandler);
+                        services.AddSingleton<IJsonRpcHandler>(setBreakpointsHandler);
+                        services.AddSingleton<IJsonRpcHandler>(threadsHandler);
+                        services.AddSingleton<IJsonRpcHandler>(stackTraceHandler);
+                        services.AddSingleton<IJsonRpcHandler>(scopesHandler);
+                        services.AddSingleton<IJsonRpcHandler>(variablesHandler);
+                        services.AddSingleton<IJsonRpcHandler>(configurationDoneHandler);
+                        services.AddSingleton<IJsonRpcHandler>(pauseHandler);
+                        services.AddSingleton<IJsonRpcHandler>(continueHandler);
+                        services.AddSingleton<IJsonRpcHandler>(nextHandler);
+                        services.AddSingleton<IJsonRpcHandler>(stepInHandler);
+                        services.AddSingleton<IJsonRpcHandler>(stepOutHandler);
+                    })
+                    .ConfigureLogging(x => x
+                        .SetMinimumLevel(LogLevel.Debug)
+                    );
+            });
 
-        await Task.Delay(-1);
+            session.Initialize(server);
+            
+            await Task.Delay(-1);
+        }
+        catch (Exception)
+        {
+             // Log error if needed, but for now just exit.
+             throw;
+        }
     }
 }
